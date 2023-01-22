@@ -1,10 +1,12 @@
 package frc.robot;
 
 import edu.wpi.first.wpilibj.Joystick;
-import edu.wpi.first.wpilibj2.command.button.JoystickButton;
+import frc.robot.subsystems.Arm;
 
 public class RobotContainer {
 
+    private final Arm arm = new Arm();
+    
     private final Joystick pJoy = new Joystick(Constants.OIConstants.pJoyID);
     private final JoystickButton joyBA = new JoystickButton(pJoy, 1); //Button A
     private final JoystickButton joyBB = new JoystickButton(pJoy, 2); //Button B
