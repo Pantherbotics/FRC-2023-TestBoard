@@ -17,6 +17,32 @@ public class Arm extends SubsystemBase {
     wristA = new PWMSparkMax(Constants.ArmConstants.wristA);
     wristB = new PWMSparkMax(Constants.ArmConstants.wristB);
   }
+
+  public void rotate(double speed) {
+    speed = (Math.abs(speed) > 0.3 ? speed : 0);
+    if (speed != 0 && Math.abs(speed) > 1) {
+      speed /= Math.abs(speed);
+    }
+    rotateA.set(speed);
+    rotateB.set(speed);
+  }
+
+  public void flex(double speed) {
+    speed = (Math.abs(speed) > 0.3 ? speed : 0);
+    if (speed != 0 && Math.abs(speed) > 1) {
+      speed /= Math.abs(speed);
+    }
+    if (speed != 0)
+      System.out.println("Flexing w " + speed);
+    wristA.set(speed);
+    wristB.set(-speed);
+  }
+
+  public void stop() {
+    rotate(0);
+    flex(0);
+  }
+
   @Override
   public void periodic() {
   }
