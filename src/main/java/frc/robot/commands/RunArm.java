@@ -26,6 +26,11 @@ public class RunArm extends CommandBase {
   public void initialize() {
   }
 
+  @Override
+  public void execute() {
+    arm.rotate(pJoy.getRawAxis(Constants.OIConstants.kDriverXL));
+    arm.flex(pJoy.getRawAxis(Constants.OIConstants.kDriverYL));
+  }
 
   // Called once the command ends or is interrupted.
   @Override
