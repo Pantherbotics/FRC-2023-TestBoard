@@ -11,8 +11,8 @@ public class Arm extends SubsystemBase {
   private final PWMGroup rotationGroup, flexGroup;
 
   public Arm() {
-    rotationGroup = new PWMGroup(4, 0);
-    flexGroup = new PWMGroup(2,rotationGroup.totalMembers());
+    flexGroup = new PWMGroup(4, 0);
+    rotationGroup = new PWMGroup(2,flexGroup.totalMembers());
   }
 
   public void rotate(double speed) {
