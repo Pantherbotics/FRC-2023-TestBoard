@@ -13,12 +13,12 @@ public class Arm extends SubsystemBase {
   private final PWMSparkMax rotateChannelA, rotateChannelB;
 
   public Arm() {
-    flexChannelA = new PWMSparkMax(Constants.ArmConstants.rotationChannelA);
-    flexChannelB = new PWMSparkMax(Constants.ArmConstants.rotationChannelB);
-    flexChannelC = new PWMSparkMax(Constants.ArmConstants.rotationChannelC);
-    flexChannelD = new PWMSparkMax(Constants.ArmConstants.rotationChannelD);
-    rotateChannelA = new PWMSparkMax(Constants.ArmConstants.flexChannelA);
-    rotateChannelB = new PWMSparkMax(Constants.ArmConstants.flexChannelB);
+    flexChannelA = new PWMSparkMax(Constants.ArmConstants.flexChannelA);
+    flexChannelB = new PWMSparkMax(Constants.ArmConstants.flexChannelB);
+    flexChannelC = new PWMSparkMax(Constants.ArmConstants.flexChannelC);
+    flexChannelD = new PWMSparkMax(Constants.ArmConstants.flexChannelD);
+    rotateChannelA = new PWMSparkMax(Constants.ArmConstants.rotateChannelA);
+    rotateChannelB = new PWMSparkMax(Constants.ArmConstants.rotateChannelB);
   }
 
   public void flex(double speed) {
