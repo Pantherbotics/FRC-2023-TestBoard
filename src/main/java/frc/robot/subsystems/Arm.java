@@ -4,23 +4,15 @@
 
 package frc.robot.subsystems;
 
-import edu.wpi.first.wpilibj.motorcontrol.PWMSparkMax;
 import edu.wpi.first.wpilibj2.command.SubsystemBase;
-import frc.robot.Constants;
+import frc.robot.utils.PWMGroup;
 
 public class Arm extends SubsystemBase {
-  private final PWMSparkMax rotateChannelA, rotateChannelB, rotateChannelC, rotateChannelD, rotateChannelE, rotateChannelF;
-  private final PWMSparkMax flexChannelA, flexChannelB;
+  private final PWMGroup rotationGroup, flexGroup;
 
   public Arm() {
-    rotateChannelA = new PWMSparkMax(Constants.ArmConstants.rotationChannelA);
-    rotateChannelB = new PWMSparkMax(Constants.ArmConstants.rotationChannelB);
-    rotateChannelC = new PWMSparkMax(Constants.ArmConstants.rotationChannelC);
-    rotateChannelD = new PWMSparkMax(Constants.ArmConstants.rotationChannelD);
-    rotateChannelE = new PWMSparkMax(Constants.ArmConstants.rotationChannelE);
-    rotateChannelF = new PWMSparkMax(Constants.ArmConstants.rotationChannelF);
-    flexChannelA = new PWMSparkMax(Constants.ArmConstants.flexChannelA);
-    flexChannelB = new PWMSparkMax(Constants.ArmConstants.flexChannelB);
+    rotationGroup = new PWMGroup(4, 0);
+    flexGroup = new PWMGroup(2,rotationGroup.totalMembers());
   }
 
   public void rotate(double speed) {
@@ -28,12 +20,7 @@ public class Arm extends SubsystemBase {
     if (speed != 0 && Math.abs(speed) > 1) {
       speed /= Math.abs(speed);
     }
-    rotateChannelA.set(speed);
-    rotateChannelB.set(speed);
-    rotateChannelC.set(speed);
-    rotateChannelD.set(speed);
-    rotateChannelE.set(speed);
-    rotateChannelF.set(speed);
+    rotationGroup.setSignal(speed);
   }
 
   public void flex(double speed) {
@@ -41,8 +28,7 @@ public class Arm extends SubsystemBase {
     if (speed != 0 && Math.abs(speed) > 1) {
       speed /= Math.abs(speed);
     }
-    flexChannelA.set(speed);
-    flexChannelB.set(speed);
+    flexGroup.setSignal(speed);
   }
 
   public void stop() {
