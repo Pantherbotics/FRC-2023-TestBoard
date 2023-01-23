@@ -7,6 +7,7 @@ import edu.wpi.first.wpilibj.motorcontrol.PWMSparkMax;
 public class PWMGroup {
     private PWMSparkMax[] members = new PWMSparkMax[] {};
     private boolean[] exists = new boolean[] {};
+    private boolean[] reversed = new boolean[] {};
     private int totalMembers = 0;
     private static ArrayList<Integer> activeChannels = new ArrayList<Integer>();
     
@@ -20,6 +21,7 @@ public class PWMGroup {
         for (int i = 0; i < exists.length; i++) {
             exists[i] = false;
         }
+        reversed = exists;
     }
     
     /**
@@ -66,6 +68,16 @@ public class PWMGroup {
             members = temp;
         }
         setChannel(totalMembers, channel);
+    }
+
+    /**
+     * Allows users to specify whether a PWMSparkMax should invert any input it receives.
+     * @param sparkToReverse The index of the PWMSparkMax to alter.
+     * @param reversedValue True if reversed, falsed if normal processing.
+     */
+    public void setReversed(int sparkToReverse, boolean reversedValue){
+        if(sparkToReverse < 0 || sparkToReverse >= totalMembers) throw new IndexOutOfBoundsException("No PWMSparkMax exists at the specified index");
+        reversed[sparkToReverse] = reversedValue;
     }
 
     /**
