@@ -27,7 +27,10 @@ public class PWMGroup {
             throw new IndexOutOfBoundsException("Invalid Spark Index! The max index you can access for this PWMGroup is" + members.length);
         }
         members[sparkIndex] = new PWMSparkMax(channel);
-        exists[sparkIndex] = true;
+        if(!exists[sparkIndex]){
+            totalMembers += 1;
+            exists[sparkIndex] = true;
+        }
     }
 
     public void add(PWMSparkMax toAdd){
