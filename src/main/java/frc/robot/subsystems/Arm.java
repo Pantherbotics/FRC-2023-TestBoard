@@ -20,7 +20,7 @@ public class Arm extends SubsystemBase {
     if (speed != 0 && Math.abs(speed) > 1) {
       speed /= Math.abs(speed);
     }
-    rotationGroup.setSignal(speed);
+    rotationGroup.setGroupSignal(speed);
   }
 
   public void flex(double speed) {
@@ -28,7 +28,7 @@ public class Arm extends SubsystemBase {
     if (speed != 0 && Math.abs(speed) > 1) {
       speed /= Math.abs(speed);
     }
-    flexGroup.setSignal(speed);
+    flexGroup.setGroupSignal(speed);
   }
 
   public void stop() {
