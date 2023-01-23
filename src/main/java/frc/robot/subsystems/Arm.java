@@ -9,13 +9,11 @@ import edu.wpi.first.wpilibj2.command.SubsystemBase;
 import frc.robot.Constants;
 
 public class Arm extends SubsystemBase {
-  private final PWMSparkMax rotateA, rotateB, wristA, wristB;
+  private final PWMSparkMax rotateChannel, flexChannel;
 
   public Arm() {
-    rotateA = new PWMSparkMax(Constants.ArmConstants.rotationA);
-    rotateB = new PWMSparkMax(Constants.ArmConstants.rotationB);
-    wristA = new PWMSparkMax(Constants.ArmConstants.wristA);
-    wristB = new PWMSparkMax(Constants.ArmConstants.wristB);
+    rotateChannel = new PWMSparkMax(Constants.ArmConstants.rotationA);
+    flexChannel = new PWMSparkMax(Constants.ArmConstants.rotationB);
   }
 
   public void rotate(double speed) {
@@ -23,8 +21,7 @@ public class Arm extends SubsystemBase {
     if (speed != 0 && Math.abs(speed) > 1) {
       speed /= Math.abs(speed);
     }
-    rotateA.set(speed);
-    rotateB.set(speed);
+    
   }
 
   public void flex(double speed) {
@@ -32,10 +29,6 @@ public class Arm extends SubsystemBase {
     if (speed != 0 && Math.abs(speed) > 1) {
       speed /= Math.abs(speed);
     }
-    if (speed != 0)
-      System.out.println("Flexing w " + speed);
-    wristA.set(speed);
-    wristB.set(-speed);
   }
 
   public void stop() {
