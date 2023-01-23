@@ -80,6 +80,12 @@ public class PWMGroup {
         reversed[sparkToReverse] = reversedValue;
     }
 
+    public void setSignal(double signal){
+        for (int i = 0; i < totalMembers; i++) {
+            members[i].set(signal);
+        }
+    }
+
     /**
      * Checks to see if a channel is in use by this group.
      * @param channel The channel to check.
