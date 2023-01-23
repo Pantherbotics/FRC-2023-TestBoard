@@ -82,7 +82,7 @@ public class PWMGroup {
 
     public void setSignal(double signal){
         for (int i = 0; i < totalMembers; i++) {
-            members[i].set(signal);
+            members[i].set((reversed[i] ? -1 : 1) * signal);
         }
     }
 
