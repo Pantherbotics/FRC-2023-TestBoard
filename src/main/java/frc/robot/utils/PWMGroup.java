@@ -80,10 +80,15 @@ public class PWMGroup {
         reversed[sparkToReverse] = reversedValue;
     }
 
-    public void setSignal(double signal){
+    public void setGroupSignal(double signal){
         for (int i = 0; i < totalMembers; i++) {
-            members[i].set((reversed[i] ? -1 : 1) * signal);
+            setSignal(i, signal);
         }
+    }
+
+    public void setSignal(int sparkID, double signal){
+        if(sparkID < 0 || sparkID >= totalMembers) throw new IndexOutOfBoundsException("No PWMSparkMax exists at the specified index");
+        members[sparkID].set((reversed[sparkID] ? -1 : 1) * signal);
     }
 
     /**
