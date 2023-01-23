@@ -33,7 +33,14 @@ public class PWMGroup {
         }
     }
 
-    public void add(PWMSparkMax toAdd){
-
+    public void add(int channel){
+        if(totalMembers == members.length){
+            PWMSparkMax[] temp = new PWMSparkMax[totalMembers + 1];
+            for (int i = 0; i < members.length; i++) {
+                temp[i] = members[i];
+            }
+            members = temp;
+        }
+        members[totalMembers] = new PWMSparkMax(channel);
     }
 }
