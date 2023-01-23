@@ -21,7 +21,7 @@ public class Arm extends SubsystemBase {
     if (speed != 0 && Math.abs(speed) > 1) {
       speed /= Math.abs(speed);
     }
-    
+    rotateChannel.set(speed);
   }
 
   public void flex(double speed) {
@@ -29,6 +29,7 @@ public class Arm extends SubsystemBase {
     if (speed != 0 && Math.abs(speed) > 1) {
       speed /= Math.abs(speed);
     }
+    flexChannel.set(speed);
   }
 
   public void stop() {
