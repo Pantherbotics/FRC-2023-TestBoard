@@ -12,9 +12,7 @@ public class Constants {
         public static final int rotationChannelB = 1;
         public static final int rotationChannelC = 2;
         public static final int rotationChannelD = 3;
-        public static final int rotationChannelE = 4;
-        public static final int rotationChannelF = 5;
-        public static final int flexChannelA = 6;
-        public static final int flexChannelB = 7;
+        public static final int flexChannelA = 4;
+        public static final int flexChannelB = 5;
     }
 }
