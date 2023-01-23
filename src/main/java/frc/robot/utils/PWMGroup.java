@@ -95,6 +95,14 @@ public class PWMGroup {
     }
 
     /**
+     * Access function for the total members of a group.
+     * @return The total members of the group.
+     */
+    public int totalMembers(){
+        return totalMembers;
+    }
+
+    /**
      * Added access function to edit individual PWMSparkMaxs.
      * @param sparkIndex The index to retrieve from.
      * @return The PWMSparkMax at the specified index.
