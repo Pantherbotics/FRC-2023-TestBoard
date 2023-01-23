@@ -40,8 +40,8 @@ public class PWMGroup {
      * @param channel The channel to attatch to the PWMSparkMax.
      */
     public void setChannel(int sparkIndex, int channel){
-        if(sparkIndex < 0 || sparkIndex == members.length){
-            throw new IndexOutOfBoundsException("Invalid Spark Index! The max index you can access for this PWMGroup is" + members.length);
+        if(sparkIndex < 0 || sparkIndex >= members.length){
+            throw new IndexOutOfBoundsException("Invalid Spark Index! The max index you can access for this PWMGroup is" + (members.length - 1));
         }
         if(channelExists(channel)) throw new IndexOutOfBoundsException("The channel " + channel + " is already in use.");
         members[sparkIndex] = new PWMSparkMax(channel);
