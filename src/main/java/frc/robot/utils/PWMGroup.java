@@ -21,6 +21,7 @@ public class PWMGroup {
             exists[i] = false;
         }
     }
+    
     /**
      * Create a new PWMGroup of initialized PWMSparkMaxs.
      * @param memberCount The size of the PWMGroup.
@@ -79,5 +80,15 @@ public class PWMGroup {
             }
         }
         return false;
+    }
+
+    /**
+     * Added access function to edit individual PWMSparkMaxs.
+     * @param sparkIndex The index to retrieve from.
+     * @return The PWMSparkMax at the specified index.
+     */
+    public PWMSparkMax getPWMSparkMax(int sparkIndex){
+        if(!exists[sparkIndex]) throw new IndexOutOfBoundsException("No PWMSparkMax exists at the specified index");
+        return members[sparkIndex];
     }
 }
