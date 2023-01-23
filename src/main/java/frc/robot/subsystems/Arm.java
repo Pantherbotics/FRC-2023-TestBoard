@@ -12,8 +12,8 @@ public class Arm extends SubsystemBase {
   private final PWMSparkMax rotateChannel, flexChannel;
 
   public Arm() {
-    rotateChannel = new PWMSparkMax(Constants.ArmConstants.rotationA);
-    flexChannel = new PWMSparkMax(Constants.ArmConstants.rotationB);
+    rotateChannel = new PWMSparkMax(Constants.ArmConstants.rotationChannel);
+    flexChannel = new PWMSparkMax(Constants.ArmConstants.flexChannel);
   }
 
   public void rotate(double speed) {
