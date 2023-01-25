@@ -35,7 +35,7 @@ public class Arm extends SubsystemBase {
     if (speed != 0 && Math.abs(speed) > 1) {
       speed /= Math.abs(speed);
     }
-    rotationGroup.setGroupSignal(speed);
+    rotateGroup.setGroupSignal(speed);
   }
 
   public void rotate(double speed) {
