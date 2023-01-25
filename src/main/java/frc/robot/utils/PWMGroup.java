@@ -70,6 +70,11 @@ public class PWMGroup {
         setChannel(totalMembers, channel);
     }
 
+    public void add(int ...channels){
+        for (int channel : channels) {
+            add(channel);
+        }
+    }
     /**
      * Allows users to specify whether a PWMSparkMax should invert any input it receives.
      * @param sparkToReverse The index of the PWMSparkMax to alter.
@@ -92,6 +97,12 @@ public class PWMGroup {
             }
         }
         return false;
+    }
+
+    public void setAll(double speed) {
+      for (PWMSparkMax member : members) {
+        member.set(speed);
+      }; 
     }
 
     /**

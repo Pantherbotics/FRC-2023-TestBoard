@@ -4,21 +4,32 @@
 
 package frc.robot.subsystems;
 
-import edu.wpi.first.wpilibj.motorcontrol.PWMSparkMax;
+import com.ctre.phoenix.sensors.CANCoder;
+
+
+import edu.wpi.first.math.controller.PIDController;
 import edu.wpi.first.wpilibj2.command.SubsystemBase;
-import frc.robot.Constants;
+import frc.robot.utils.PWMGroup;
+
+import static frc.robot.Constants.ArmConstants.*;
 
 public class Arm extends SubsystemBase {
-  private final PWMSparkMax flexChannelA, flexChannelB, flexChannelC, flexChannelD;
-  private final PWMSparkMax rotateChannelA, rotateChannelB;
 
+  private final PIDController flexPID, rotatePID;
+  private final PWMGroup flexGroup, rotateGroup;
+
+  private CANCoder flexEcoder, rotateEcoder;
+  
+  //imagine it had getters and setters
+  public double flexPoint, rotatePoint;
+  
   public Arm() {
-    flexChannelA = new PWMSparkMax(Constants.ArmConstants.flexChannelA);
-    flexChannelB = new PWMSparkMax(Constants.ArmConstants.flexChannelB);
-    flexChannelC = new PWMSparkMax(Constants.ArmConstants.flexChannelC);
-    flexChannelD = new PWMSparkMax(Constants.ArmConstants.flexChannelD);
-    rotateChannelA = new PWMSparkMax(Constants.ArmConstants.rotateChannelA);
-    rotateChannelB = new PWMSparkMax(Constants.ArmConstants.rotateChannelB);
+    flexPID = new PIDController(flexKP, flexKI, flexKD);
+    rotatePID = new PIDController(rotateKP, rotateKI, rotateKD);
+    
+    flexGroup      = new PWMGroup(flexFirstChannel, flexChannelCount);
+    rotateGroup    = new PWMGroup(rotateFirstChannel,rotateChannelCount);
+  
   }
 
   public void flex(double speed) {
@@ -26,10 +37,8 @@ public class Arm extends SubsystemBase {
     if (speed != 0 && Math.abs(speed) > 1) {
       speed /= Math.abs(speed);
     }
-    flexChannelA.set(speed);
-    flexChannelB.set(speed);
-    flexChannelC.set(speed);
-    flexChannelD.set(speed);
+
+    flexGroup.setAll(speed);
   }
 
   public void rotate(double speed) {
@@ -37,8 +46,8 @@ public class Arm extends SubsystemBase {
     if (speed != 0 && Math.abs(speed) > 1) {
       speed /= Math.abs(speed);
     }
-    rotateChannelA.set(speed);
-    rotateChannelB.set(speed);
+    
+    rotateGroup.setAll(speed);
   }
 
   public void stop() {
@@ -46,8 +55,13 @@ public class Arm extends SubsystemBase {
     flex(0);
   }
 
+
+
   @Override
   public void periodic() {
+    // not using flex and rotate because of deadzones
+    flexGroup.setAll(flexPID.calculate(flexEcoder.getAbsolutePosition(), flexPoint));
+    rotateGroup.setAll(rotatePID.calculate(rotateEcoder.getAbsolutePosition(), rotatePoint));
   }
 
 }
