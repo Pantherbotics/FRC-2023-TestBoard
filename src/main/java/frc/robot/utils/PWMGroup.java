@@ -86,6 +86,26 @@ public class PWMGroup {
     }
 
     /**
+     * Send a PWM signal to every member of the group.
+     * @param signal A PWM Signal between -1,1.
+     */
+    public void setGroupSignal(double signal){
+        for (int i = 0; i < totalMembers; i++) {
+            setSignal(i, signal);
+        }
+    }
+
+    /**
+     * Send a PWM signal to a specific group member.
+     * @param sparkID The index of the PWMSparkMax to signal.
+     * @param signal A PWMSignal between -1,1.
+     */
+    public void setSignal(int sparkID, double signal){
+        if(sparkID < 0 || sparkID >= totalMembers) throw new IndexOutOfBoundsException("No PWMSparkMax exists at the specified index");
+        members[sparkID].set((reversed[sparkID] ? -1 : 1) * signal);
+    }
+
+    /**
      * Checks to see if a channel is in use by this group.
      * @param channel The channel to check.
      * @return False if the specified channel is not in use.
@@ -103,6 +123,14 @@ public class PWMGroup {
       for (PWMSparkMax member : members) {
         member.set(speed);
       }; 
+    }
+
+    /**
+     * Access function for the total members of a group.
+     * @return The total members of the group.
+     */
+    public int totalMembers(){
+        return totalMembers;
     }
 
     /**

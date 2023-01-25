@@ -3,7 +3,6 @@
 // the WPILib BSD license file in the root directory of this project.
 
 package frc.robot.subsystems;
-
 import com.ctre.phoenix.sensors.CANCoder;
 
 
@@ -29,7 +28,6 @@ public class Arm extends SubsystemBase {
     
     flexGroup      = new PWMGroup(flexFirstChannel, flexChannelCount);
     rotateGroup    = new PWMGroup(rotateFirstChannel,rotateChannelCount);
-  
   }
 
   public void flex(double speed) {
@@ -37,8 +35,7 @@ public class Arm extends SubsystemBase {
     if (speed != 0 && Math.abs(speed) > 1) {
       speed /= Math.abs(speed);
     }
-
-    flexGroup.setAll(speed);
+    rotationGroup.setGroupSignal(speed);
   }
 
   public void rotate(double speed) {
@@ -46,8 +43,9 @@ public class Arm extends SubsystemBase {
     if (speed != 0 && Math.abs(speed) > 1) {
       speed /= Math.abs(speed);
     }
-    
-    rotateGroup.setAll(speed);
+
+    flexGroup.setGroupSignal(speed);
+
   }
 
   public void stop() {
