@@ -7,6 +7,8 @@ import com.ctre.phoenix.sensors.CANCoder;
 
 
 import edu.wpi.first.math.controller.PIDController;
+import edu.wpi.first.wpilibj.DoubleSolenoid;
+import edu.wpi.first.wpilibj.PneumaticsModuleType;
 import edu.wpi.first.wpilibj2.command.SubsystemBase;
 import frc.robot.utils.PWMGroup;
 
@@ -14,13 +16,14 @@ import static frc.robot.Constants.ArmConstants.*;
 
 public class Arm extends SubsystemBase {
 
-  private final PIDController flexPID, rotatePID;
   private final PWMGroup flexGroup, rotateGroup;
 
+  private final PIDController flexPID, rotatePID;
   private CANCoder flexEncoder, rotateEncoder;
-  
   private double flexPoint, rotatePoint;
-  
+
+  DoubleSolenoid clawSolenoid;
+
   public double getFlexPoint() {
     return flexPoint;
   }
@@ -43,6 +46,14 @@ public class Arm extends SubsystemBase {
     
     flexGroup      = new PWMGroup(flexFirstChannel, flexChannelCount);
     rotateGroup    = new PWMGroup(rotateFirstChannel,rotateChannelCount);
+
+    flexEncoder = new CANCoder(flexEncoderCAN);
+    rotateEncoder = new CANCoder(rotateEncoderCAN);
+
+    clawSolenoid = new DoubleSolenoid(PneumaticsModuleType.CTREPCM, pcmCANa, pcmCANb);
+    clawSolenoid.set(DoubleSolenoid.Value.kForward);
+
+
   }
 
   public void flex(double speed) {
@@ -53,6 +64,10 @@ public class Arm extends SubsystemBase {
 
     flexPoint += speed;
     
+  }
+
+  public void toggle() {
+    clawSolenoid.toggle();
   }
 
   public void rotate(double speed) {
