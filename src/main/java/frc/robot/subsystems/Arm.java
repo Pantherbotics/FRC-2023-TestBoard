@@ -17,11 +17,26 @@ public class Arm extends SubsystemBase {
   private final PIDController flexPID, rotatePID;
   private final PWMGroup flexGroup, rotateGroup;
 
-  private CANCoder flexEcoder, rotateEcoder;
+  private CANCoder flexEncoder, rotateEncoder;
   
-  //imagine it had getters and setters
-  public double flexPoint, rotatePoint;
+  private double flexPoint, rotatePoint;
   
+  public double getFlexPoint() {
+    return flexPoint;
+  }
+
+  public void setFlexPoint(double flexPoint) {
+    this.flexPoint = flexPoint;
+  }
+
+  public double getRotatePoint() {
+    return rotatePoint;
+  }
+
+  public void setRotatePoint(double rotatePoint) {
+    this.rotatePoint = rotatePoint;
+  }
+
   public Arm() {
     flexPID = new PIDController(flexKP, flexKI, flexKD);
     rotatePID = new PIDController(rotateKP, rotateKI, rotateKD);
@@ -35,16 +50,19 @@ public class Arm extends SubsystemBase {
     if (speed != 0 && Math.abs(speed) > 1) {
       speed /= Math.abs(speed);
     }
-    rotateGroup.setGroupSignal(speed);
+
+    flexPoint += speed;
+    
   }
 
   public void rotate(double speed) {
     speed = (Math.abs(speed) > 0.3 ? speed : 0);
+    
     if (speed != 0 && Math.abs(speed) > 1) {
       speed /= Math.abs(speed);
     }
 
-    flexGroup.setGroupSignal(speed);
+    rotatePoint += speed;
 
   }
 
@@ -58,8 +76,8 @@ public class Arm extends SubsystemBase {
   @Override
   public void periodic() {
     // not using flex and rotate because of deadzones
-    flexGroup.setAll(flexPID.calculate(flexEcoder.getAbsolutePosition(), flexPoint));
-    rotateGroup.setAll(rotatePID.calculate(rotateEcoder.getAbsolutePosition(), rotatePoint));
+    flexGroup.setAll(flexPID.calculate(flexEncoder.getAbsolutePosition(), flexPoint));
+    rotateGroup.setAll(rotatePID.calculate(rotateEncoder.getAbsolutePosition(), rotatePoint));
   }
 
 }
