@@ -16,7 +16,7 @@ public class Constants {
         public static final int flexChannelCount = 4;
 
         public static final int rotateFirstChannel = 4;
-        public static final int rotateChannelCount = 1;
+        public static final int rotateChannelCount = 2;
 
         public static final double rotateKP = 0.9;
         public static final double rotateKI = 0;

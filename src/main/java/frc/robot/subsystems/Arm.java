@@ -56,8 +56,8 @@ public class Arm extends SubsystemBase {
     flexPID = new PIDController(flexKP, flexKI, flexKD);
     rotatePID = new PIDController(rotateKP, rotateKI, rotateKD);
 
-    flexGroup = new PWMGroup(flexFirstChannel, flexChannelCount);
-    rotateGroup = new PWMGroup(rotateFirstChannel, rotateChannelCount);
+    flexGroup = new PWMGroup(flexChannelCount, flexFirstChannel);
+    rotateGroup = new PWMGroup(rotateChannelCount, rotateFirstChannel);
 
     flexEncoder = new CANCoder(flexEncoderCAN);
     rotateEncoder = new CANCoder(rotateEncoderCAN);
@@ -66,7 +66,7 @@ public class Arm extends SubsystemBase {
     clawSolenoid.set(DoubleSolenoid.Value.kForward);
   }
 
-  public void flex(double speed) {
+  public void flexPID(double speed) {
     speed = (Math.abs(speed) > 0.3 ? speed : 0);
     if (speed != 0 && Math.abs(speed) > 1) {
       speed /= Math.abs(speed);
@@ -76,7 +76,7 @@ public class Arm extends SubsystemBase {
 
   }
 
-  public void rotate(double speed) {
+  public void rotatePID(double speed) {
     speed = (Math.abs(speed) > 0.3 ? speed : 0);
 
     if (speed != 0 && Math.abs(speed) > 1) {
@@ -87,35 +87,28 @@ public class Arm extends SubsystemBase {
 
   }
 
-  public void flexDebug(double speed) {
+  public void flexOpen(double speed) {
     speed = (Math.abs(speed) > 0.3 ? speed : 0);
     if (speed != 0 && Math.abs(speed) > 1) {
       speed /= Math.abs(speed);
     }
 
     flexGroup.setGroupSignal(speed);
-
-    if (Math.abs(speed) > 0.3) {
-      System.out.println("We flexin.");
-    }
   }
 
-  public void rotateDebug(double speed) {
+  public void rotateOpen(double speed) {
     speed = (Math.abs(speed) > 0.3 ? speed : 0);
 
     if (speed != 0 && Math.abs(speed) > 1) {
       speed /= Math.abs(speed);
-    }
-    if (Math.abs(speed) > 0.3) {
-      System.out.println("We rotating.");
     }
     rotateGroup.setGroupSignal(speed);
 
   }
 
   public void stop() {
-    rotate(0);
-    flex(0);
+    rotateOpen(0);
+    flexOpen(0);
   }
 
   /*
