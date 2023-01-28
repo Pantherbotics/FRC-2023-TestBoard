@@ -31,12 +31,18 @@ public class Arm extends SubsystemBase {
     return flexPoint;
   }
 
-  public boolean isDoPID() {
+  public boolean DoPID() {
     return doPID;
+  }
+
+  public double getFlexAbsolutePosition(){
+    return flexEncoder.getAbsolutePosition() + (flexEncoder.getAbsolutePosition() < 250 ? 360 : 0);
   }
 
   public boolean setDoPID(boolean doPID) {
     this.doPID = doPID;
+    if (DoPID()) {
+    }
     return doPID;
   }
 
@@ -62,6 +68,8 @@ public class Arm extends SubsystemBase {
     flexEncoder = new CANCoder(flexEncoderCAN);
     rotateEncoder = new CANCoder(rotateEncoderCAN);
 
+    flexPoint = flexEncoder.getAbsolutePosition();
+
     clawSolenoid = new DoubleSolenoid(PneumaticsModuleType.CTREPCM, pcmCANa, pcmCANb);
     clawSolenoid.set(DoubleSolenoid.Value.kForward);
   }
@@ -72,7 +80,7 @@ public class Arm extends SubsystemBase {
       speed /= Math.abs(speed);
     }
 
-    flexPoint += speed;
+    flexPoint += (getFlexAbsolutePosition() < 456 ? speed : 0);
 
   }
 
@@ -92,6 +100,7 @@ public class Arm extends SubsystemBase {
       speed /= Math.abs(speed);
     }
 
+    flexPoint = getFlexAbsolutePosition();
     flexGroup.setGroupSignal(speed);
   }
 
@@ -113,19 +122,14 @@ public class Arm extends SubsystemBase {
   @Override
   public void periodic() {
     if (doPID) {
-      // not using flex and rotate because of deadzones
-    /*   flexGroup.setAll(flexPID.calculate(flexEncoder.getAbsolutePosition(),
-          flexPoint));
-      rotateGroup.setAll(rotatePID.calculate(rotateEncoder.getAbsolutePosition(),
-          rotatePoint)); */
-
-      SmartDashboard.putNumber("Flex point", getFlexPoint());
-      SmartDashboard.putNumber("Rotate point", getRotatePoint());
-
-      SmartDashboard.putNumber("Flex Encoder", flexEncoder.getAbsolutePosition());
-      SmartDashboard.putNumber("Rotate Encoder",
-          rotateEncoder.getAbsolutePosition());
+        flexGroup.setGroupSignal(flexPID.calculate(getFlexAbsolutePosition(), flexPoint));
     }
-  }
+    SmartDashboard.putNumber("Flex point", getFlexPoint());
+    SmartDashboard.putNumber("Rotate point", getRotatePoint());
 
+    SmartDashboard.putNumber("Flex Encoder", getFlexAbsolutePosition());
+    SmartDashboard.putNumber("Raw Flex Encoder", flexEncoder.getAbsolutePosition());
+    SmartDashboard.putNumber("Rotate Encoder",
+        rotateEncoder.getAbsolutePosition());
+  }
 }
