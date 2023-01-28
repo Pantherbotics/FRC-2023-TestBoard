@@ -31,8 +31,13 @@ public class RunArm extends CommandBase {
     double dx = pJoy.getRawAxis(Constants.OIConstants.kDriverXL);
     double dy = pJoy.getRawAxis(Constants.OIConstants.kDriverYL);
 
-    arm.flexOpen(dy);
-    arm.rotateOpen(dx);
+    if (arm.DoPID()) {
+      arm.flexPID(dy);
+      arm.rotatePID(dx);
+    } else {
+      arm.rotateOpen(dx);
+      arm.flexOpen(dy);
+    }
   }
 
   // Called once the command ends or is interrupted.

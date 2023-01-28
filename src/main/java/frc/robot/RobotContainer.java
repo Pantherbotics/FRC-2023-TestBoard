@@ -27,7 +27,7 @@ public class RobotContainer {
 
         ButtonA.toggleOnTrue(
             new InstantCommand(() ->
-             arm.setDoPID(!arm.isDoPID())
+             arm.setDoPID(!arm.DoPID())
             )
         );
     }
