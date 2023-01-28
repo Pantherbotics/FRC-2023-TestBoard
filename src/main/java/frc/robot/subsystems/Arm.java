@@ -11,56 +11,33 @@ import edu.wpi.first.wpilibj.DoubleSolenoid;
 import edu.wpi.first.wpilibj.PneumaticsModuleType;
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import edu.wpi.first.wpilibj2.command.SubsystemBase;
+import frc.robot.utils.PIDgroup;
 import frc.robot.utils.PWMGroup;
 
 import static frc.robot.Constants.ArmConstants.*;
 
 public class Arm extends SubsystemBase {
 
-  private final PWMGroup flexGroup, rotateGroup;
-
-  private final PIDController flexPID, rotatePID;
+  private final PIDgroup flexGroup, rotateGroup;
   private CANCoder flexEncoder, rotateEncoder;
-  private double flexPoint, rotatePoint;
 
   DoubleSolenoid clawSolenoid;
 
   private boolean doPID = false;
 
-  public double getFlexPoint() {
-    return flexPoint;
-  }
-
-  public boolean isDoPID() {
-    return doPID;
-  }
-
-  public boolean setDoPID(boolean doPID) {
-    this.doPID = doPID;
-    return doPID;
-  }
-
-  public void setFlexPoint(double flexPoint) {
-    this.flexPoint = flexPoint;
-  }
-
-  public double getRotatePoint() {
-    return rotatePoint;
-  }
-
-  public void setRotatePoint(double rotatePoint) {
-    this.rotatePoint = rotatePoint;
-  }
-
   public Arm() {
-    flexPID = new PIDController(flexKP, flexKI, flexKD);
-    rotatePID = new PIDController(rotateKP, rotateKI, rotateKD);
-
-    flexGroup = new PWMGroup(flexFirstChannel, flexChannelCount);
-    rotateGroup = new PWMGroup(rotateFirstChannel, rotateChannelCount);
-
     flexEncoder = new CANCoder(flexEncoderCAN);
     rotateEncoder = new CANCoder(rotateEncoderCAN);
+
+    flexGroup = new PIDgroup(
+        new PWMGroup(flexFirstChannel, flexChannelCount),
+        new PIDController(flexKP, flexKI, flexKD),
+        flexEncoder::getAbsolutePosition);
+
+    rotateGroup = new PIDgroup(
+        new PWMGroup(rotateFirstChannel, rotateChannelCount),
+        new PIDController(rotateKP, rotateKI, rotateKD),
+        rotateEncoder::getAbsolutePosition);
 
     clawSolenoid = new DoubleSolenoid(PneumaticsModuleType.CTREPCM, pcmCANa, pcmCANb);
     clawSolenoid.set(DoubleSolenoid.Value.kForward);
@@ -72,7 +49,7 @@ public class Arm extends SubsystemBase {
       speed /= Math.abs(speed);
     }
 
-    flexPoint += speed;
+    flexGroup.setPoint += speed;
 
   }
 
@@ -83,7 +60,7 @@ public class Arm extends SubsystemBase {
       speed /= Math.abs(speed);
     }
 
-    rotatePoint += speed;
+    flexGroup.setPoint += speed;
 
   }
 
@@ -93,7 +70,7 @@ public class Arm extends SubsystemBase {
       speed /= Math.abs(speed);
     }
 
-    flexGroup.setGroupSignal(speed);
+    flexGroup.getMotors().setGroupSignal(speed);
 
   }
 
@@ -104,7 +81,7 @@ public class Arm extends SubsystemBase {
       speed /= Math.abs(speed);
     }
 
-    rotateGroup.setGroupSignal(speed);
+    rotateGroup.getMotors().setGroupSignal(speed);
 
   }
 
@@ -117,15 +94,23 @@ public class Arm extends SubsystemBase {
   public void periodic() {
     if (doPID) {
       // not using flex and rotate because of deadzones
-      flexGroup.setAll(flexPID.calculate(flexEncoder.getAbsolutePosition(), flexPoint));
-      rotateGroup.setAll(rotatePID.calculate(rotateEncoder.getAbsolutePosition(), rotatePoint));
-    
-      SmartDashboard.putNumber("Flex point", getFlexPoint());
-      SmartDashboard.putNumber("Rotate point", getRotatePoint());
+      flexGroup.process();
+      rotateGroup.process();
 
-      SmartDashboard.putNumber("Flex Encoder", flexEncoder.getAbsolutePosition());
-      SmartDashboard.putNumber("Rotate Encoder", rotateEncoder.getAbsolutePosition());
+      SmartDashboard.putNumber("Flex point", flexGroup.setPoint);
+      SmartDashboard.putNumber("Rotate point", rotateGroup.setPoint);
+
     }
+
+    SmartDashboard.putNumber("Flex Encoder", flexEncoder.getAbsolutePosition());
+    SmartDashboard.putNumber("Rotate Encoder", rotateEncoder.getAbsolutePosition());
   }
 
+  public boolean isDoPID() {
+    return doPID;
+  }
+
+  public void setDoPID(boolean doPID) {
+    this.doPID = doPID;
+  }
 }
