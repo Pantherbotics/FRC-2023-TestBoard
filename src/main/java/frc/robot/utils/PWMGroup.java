@@ -4,7 +4,7 @@ import java.util.ArrayList;
 
 import edu.wpi.first.wpilibj.motorcontrol.PWMSparkMax;
 
-public class PWMGroup {
+public class PWMGroup implements motorGroup {
     private PWMSparkMax[] members = new PWMSparkMax[] {};
     private boolean[] exists = new boolean[] {};
     private boolean[] reversed = new boolean[] {};
@@ -117,12 +117,6 @@ public class PWMGroup {
             }
         }
         return false;
-    }
-
-    public void setAll(double speed) {
-      for (PWMSparkMax member : members) {
-        member.set(speed);
-      }; 
     }
 
     /**
