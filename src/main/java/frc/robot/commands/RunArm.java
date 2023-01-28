@@ -35,8 +35,8 @@ public class RunArm extends CommandBase {
       arm.rotate(dx);
       arm.flex(dy);
     } else {
-      arm.rotateDebug(dx);
-      arm.flexDebug(dy);
+      //arm.rotateDebug(pJoy.getRawAxis(Constants.OIConstants.kDriverXL));
+      arm.flex(pJoy.getRawAxis(Constants.OIConstants.kDriverYL));
     }
   }
 

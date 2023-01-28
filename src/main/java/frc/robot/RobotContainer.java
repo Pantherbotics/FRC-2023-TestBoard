@@ -25,11 +25,11 @@ public class RobotContainer {
            new RunArm(arm, pJoy)  
         );
 
-        ButtonA.toggleOnTrue(
+        /* ButtonA.toggleOnTrue(
             new InstantCommand(() ->
              arm.setDoPID(!arm.isDoPID())
             )
-        );
+        ); */
     }
 
     public void updateSmartDashboard(){

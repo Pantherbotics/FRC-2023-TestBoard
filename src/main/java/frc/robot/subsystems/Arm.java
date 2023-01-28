@@ -95,6 +95,9 @@ public class Arm extends SubsystemBase {
 
     flexGroup.setGroupSignal(speed);
 
+    if (Math.abs(speed) > 0.3) {
+      System.out.println("We flexin.");
+    }
   }
 
   public void rotateDebug(double speed) {
@@ -103,7 +106,9 @@ public class Arm extends SubsystemBase {
     if (speed != 0 && Math.abs(speed) > 1) {
       speed /= Math.abs(speed);
     }
-
+    if (Math.abs(speed) > 0.3) {
+      System.out.println("We rotating.");
+    }
     rotateGroup.setGroupSignal(speed);
 
   }
@@ -113,19 +118,23 @@ public class Arm extends SubsystemBase {
     flex(0);
   }
 
-  @Override
-  public void periodic() {
-    if (doPID) {
-      // not using flex and rotate because of deadzones
-      flexGroup.setAll(flexPID.calculate(flexEncoder.getAbsolutePosition(), flexPoint));
-      rotateGroup.setAll(rotatePID.calculate(rotateEncoder.getAbsolutePosition(), rotatePoint));
-    
-      SmartDashboard.putNumber("Flex point", getFlexPoint());
-      SmartDashboard.putNumber("Rotate point", getRotatePoint());
-
-      SmartDashboard.putNumber("Flex Encoder", flexEncoder.getAbsolutePosition());
-      SmartDashboard.putNumber("Rotate Encoder", rotateEncoder.getAbsolutePosition());
-    }
-  }
-
+  /*
+   * @Override
+   * public void periodic() {
+   * if (doPID) {
+   * // not using flex and rotate because of deadzones
+   * //flexGroup.setAll(flexPID.calculate(flexEncoder.getAbsolutePosition(),
+   * flexPoint));
+   * //rotateGroup.setAll(rotatePID.calculate(rotateEncoder.getAbsolutePosition(),
+   * rotatePoint));
+   * 
+   * SmartDashboard.putNumber("Flex point", getFlexPoint());
+   * SmartDashboard.putNumber("Rotate point", getRotatePoint());
+   * 
+   * SmartDashboard.putNumber("Flex Encoder", flexEncoder.getAbsolutePosition());
+   * SmartDashboard.putNumber("Rotate Encoder",
+   * rotateEncoder.getAbsolutePosition());
+   * }
+   * }
+   */
 }
