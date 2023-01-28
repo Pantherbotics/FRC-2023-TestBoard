@@ -22,7 +22,7 @@ public class Constants {
         public static final double rotateKI = 0;
         public static final double rotateKD = 0;
 
-        public static final double flexKP = 0.9;
+        public static final double flexKP = 0.1;
         public static final double flexKI = 0;
         public static final double flexKD = 0;
         
