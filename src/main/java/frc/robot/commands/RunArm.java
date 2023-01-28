@@ -28,8 +28,16 @@ public class RunArm extends CommandBase {
 
   @Override
   public void execute() {
-    arm.rotate(pJoy.getRawAxis(Constants.OIConstants.kDriverXL));
-    arm.flex(pJoy.getRawAxis(Constants.OIConstants.kDriverYL));
+    double dx = pJoy.getRawAxis(Constants.OIConstants.kDriverXL);
+    double dy = pJoy.getRawAxis(Constants.OIConstants.kDriverYL);
+
+    if (arm.isDoPID()) {
+      arm.rotate(dx);
+      arm.flex(dy);
+    } else {
+      arm.rotateDebug(dx);
+      arm.flexDebug(dy);
+    }
   }
 
   // Called once the command ends or is interrupted.
