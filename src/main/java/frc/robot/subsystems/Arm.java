@@ -80,7 +80,7 @@ public class Arm extends SubsystemBase {
       speed /= Math.abs(speed);
     }
 
-    flexPoint += (getFlexAbsolutePosition() < 456 ? speed : 0);
+    flexPoint += (getFlexAbsolutePosition() < 485 && getFlexAbsolutePosition() > 253 ? speed : 0);
 
   }
 
