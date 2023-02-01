@@ -7,18 +7,18 @@ package frc.robot.commands;
 import edu.wpi.first.wpilibj.Joystick;
 import edu.wpi.first.wpilibj2.command.CommandBase;
 import frc.robot.Constants;
-import frc.robot.subsystems.Arm;
+import frc.robot.subsystems.Claw;
 
-public class RunArm extends CommandBase {
+public class RunClaw extends CommandBase {
 
-  private final Arm arm;
+  private final Claw claw;
 
   private final Joystick pJoy;
 
-  public RunArm(Arm _arm, Joystick _pJoy) {
-    this.arm = _arm;
+  public RunClaw(Claw _claw, Joystick _pJoy) {
+    this.claw = _claw;
     this.pJoy = _pJoy;
-    addRequirements(arm);
+    addRequirements(claw);
   }
 
   // Called when the command is initially scheduled.
@@ -31,19 +31,19 @@ public class RunArm extends CommandBase {
     double dx = pJoy.getRawAxis(Constants.OIConstants.kDriverXL);
     double dy = pJoy.getRawAxis(Constants.OIConstants.kDriverYL);
 
-    if (arm.DoPID()) {
-      arm.flexPID(dy);
-      arm.rotatePID(dx);
+    if (claw.doPID()) {
+      claw.flexPID(dy);
+      claw.rotatePID(dx);
     } else {
-      arm.rotateOpen(dx);
-      arm.flexOpen(dy);
+      claw.rotateOpen(dx);
+      claw.flexOpen(dy);
     }
   }
 
   // Called once the command ends or is interrupted.
   @Override
   public void end(boolean interrupted) {
-    arm.stop();
+    claw.stop();
   }
 
   // Returns true when the command should end.
