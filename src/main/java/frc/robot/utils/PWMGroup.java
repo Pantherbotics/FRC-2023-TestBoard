@@ -4,7 +4,7 @@ import java.util.ArrayList;
 
 import edu.wpi.first.wpilibj.motorcontrol.PWMSparkMax;
 
-public class PWMGroup implements motorGroup {
+public class PWMGroup implements MotorGroup {
     private PWMSparkMax[] members = new PWMSparkMax[] {};
     private boolean[] exists = new boolean[] {};
     private boolean[] reversed = new boolean[] {};

@@ -6,12 +6,12 @@ import edu.wpi.first.math.controller.PIDController;
 
 // basically the same things as PID subsytem, but for use within subsystems, and less flexible
 public class PIDgroup {
-    private motorGroup motors;
+    private MotorGroup motors;
     private Supplier<Double> callback;
     private PIDController pid;
     public double setPoint; // making this private doubles the number of methods, and for what?
 
-    public PIDgroup(motorGroup motors, PIDController pid, Supplier<Double> measurement) {
+    public PIDgroup(MotorGroup motors, PIDController pid, Supplier<Double> measurement) {
         this.motors = motors;
         this.callback = measurement;
         this.pid = pid;
@@ -23,7 +23,7 @@ public class PIDgroup {
                 pid.calculate((double) callback.get(), setPoint));
     }
 
-    public motorGroup getMotors() {
+    public MotorGroup getMotors() {
         return motors;
     }
 }
