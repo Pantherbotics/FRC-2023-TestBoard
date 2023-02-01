@@ -25,7 +25,6 @@ public class Constants {
         public static final double flexKP = 0.9;
         public static final double flexKI = 0;
         public static final double flexKD = 0;
-        
 
         public static final int flexEncoderCAN = 0;
         public static final int rotateEncoderCAN = 1;
