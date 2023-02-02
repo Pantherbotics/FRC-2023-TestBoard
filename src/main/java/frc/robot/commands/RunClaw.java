@@ -31,7 +31,7 @@ public class RunClaw extends CommandBase {
     double dx = pJoy.getRawAxis(Constants.OIConstants.kDriverXL);
     double dy = pJoy.getRawAxis(Constants.OIConstants.kDriverYL);
 
-    if (claw.doPID()) {
+    if (claw.getDoPID()) {
       claw.flexPID(dy);
       claw.rotatePID(dx);
     } else {

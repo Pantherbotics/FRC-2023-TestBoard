@@ -13,7 +13,7 @@ import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import edu.wpi.first.wpilibj2.command.SubsystemBase;
 import frc.robot.utils.PWMGroup;
 
-import static frc.robot.Constants.ArmConstants.*;
+import static frc.robot.Constants.ClawConstants.*;
 
 public class Claw extends SubsystemBase {
 
@@ -23,7 +23,7 @@ public class Claw extends SubsystemBase {
   private CANCoder flexEncoder, rotateEncoder;
   private double flexPoint, rotatePoint;
 
-  DoubleSolenoid clawSolenoid;
+  private DoubleSolenoid clawSolenoid;
 
   private boolean doPID = false;
 
@@ -43,23 +43,20 @@ public class Claw extends SubsystemBase {
     clawSolenoid.set(DoubleSolenoid.Value.kForward);
   }
 
-  public double getFlexPoint() {
-    return flexPoint;
-  }
-
-  public boolean doPID() {
-    return doPID;
-  }
-
   public double getFlexAbsolutePosition() {
     return flexEncoder.getAbsolutePosition() + (flexEncoder.getAbsolutePosition() < 250 ? 360 : 0);
   }
 
-  public boolean setDoPID(boolean doPID) {
-    this.doPID = doPID;
-    if (doPID()) {
-    }
+  public boolean getDoPID() {
     return doPID;
+  }
+
+  public void setDoPID(boolean doPID) {
+    this.doPID = doPID;
+  }
+
+  public double getFlexPoint() {
+    return flexPoint;
   }
 
   public void setFlexPoint(double flexPoint) {
@@ -108,11 +105,21 @@ public class Claw extends SubsystemBase {
     if(doPID) {
       flexGroup.setGroupSignal(flexPID.calculate(getFlexAbsolutePosition(), flexPoint));
     }
+    
     SmartDashboard.putNumber("Flex point", getFlexPoint());
     SmartDashboard.putNumber("Rotate point", getRotatePoint());
 
     SmartDashboard.putNumber("Flex Encoder", getFlexAbsolutePosition());
     SmartDashboard.putNumber("Raw Flex Encoder", flexEncoder.getAbsolutePosition());
     SmartDashboard.putNumber("Rotate Encoder", rotateEncoder.getAbsolutePosition());
+
+    SmartDashboard.putNumber("Flex kP", flexKP);
+    SmartDashboard.getNumber("Flex kP", flexKP);
+
+    SmartDashboard.putNumber("Flex kI", flexKI);
+    SmartDashboard.getNumber("Flex kI", flexKI);
+
+    SmartDashboard.putNumber("Flex kD", flexKD);
+    SmartDashboard.getNumber("Flex kD", flexKD);
   }
 }

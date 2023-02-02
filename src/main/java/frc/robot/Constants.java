@@ -11,7 +11,14 @@ public class Constants {
         
     }
 
-    public static final class ArmConstants {
+    public static final class ArmConstant {
+        public static final int leftPivotChannel = 0;
+        public static final int rightPivotChannel = 1;
+
+        public static final int linearActuatorChannel = 2;
+    }
+
+    public static final class ClawConstants {
         public static final int flexFirstChannel = 0;
         public static final int flexChannelCount = 4;
 
@@ -26,7 +33,6 @@ public class Constants {
         public static final double flexKI = 0.1;
         public static final double flexKD = 0;
         
-
         public static final int rotateEncoderCAN = 0;
         public static final int flexEncoderCAN = 1;
 
