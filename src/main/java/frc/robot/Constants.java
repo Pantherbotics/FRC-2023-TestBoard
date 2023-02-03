@@ -25,8 +25,8 @@ public class Constants {
         public static final int rotateFirstChannel = 4;
         public static final int rotateChannelCount = 2;
 
-        public static final double rotateKP = 0.9;
-        public static final double rotateKI = 0;
+        public static final double rotateKP = 0.8;
+        public static final double rotateKI = 0.2;
         public static final double rotateKD = 0;
 
         public static final double flexKP = 0.05;
