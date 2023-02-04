@@ -1,6 +1,11 @@
 package frc.robot.utils;
 
+import java.lang.reflect.Method;
+import java.nio.channels.Channels;
 import java.util.ArrayList;
+import java.util.function.Consumer;
+
+import com.revrobotics.CANSparkMax.IdleMode;
 
 import edu.wpi.first.wpilibj.motorcontrol.PWMSparkMax;
 
@@ -59,7 +64,7 @@ public class PWMGroup {
      * Adds a new PWMSparkMax to the group, increasing the group size if necessary.
      * @param channel The PWM Channel the new PWMSparkMax should listen to.
      */
-    public void add(int channel){
+    public void add(int channel) {
         if(totalMembers == members.length){
             PWMSparkMax[] temp = new PWMSparkMax[totalMembers + 1];
             for (int i = 0; i < members.length; i++) {
@@ -122,7 +127,7 @@ public class PWMGroup {
     public void setAll(double speed) {
       for (PWMSparkMax member : members) {
         member.set(speed);
-      }; 
+      } 
     }
 
     /**
