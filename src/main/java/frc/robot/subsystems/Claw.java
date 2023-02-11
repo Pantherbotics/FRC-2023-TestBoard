@@ -22,12 +22,11 @@ public class Claw extends SubsystemBase {
 
     public Claw() {
         //motors
-        flexMotor = new CANSparkMax(1, MotorType.kBrushless);
-        rotateMotor = new CANSparkMax(2, MotorType.kBrushless);
+        flexMotor = new CANSparkMax(8, MotorType.kBrushless);
+        rotateMotor = new CANSparkMax(7, MotorType.kBrushless);
 
         //flex encoder
         flexEncoder = flexMotor.getEncoder();
-        
         //flex pid
         flexPID = new PIDController(0.05, 0.1, 0);
 

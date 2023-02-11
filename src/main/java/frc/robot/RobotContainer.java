@@ -8,7 +8,7 @@ import frc.robot.subsystems.Claw;
 
 public class RobotContainer {
 
-    private final Claw arm = new Claw();
+    private final Claw claw = new Claw();
     
     private final Joystick pJoy = new Joystick(Constants.OIConstants.pJoyID);
     private final JoystickButton ButtonA = new JoystickButton(pJoy, 1);
@@ -20,13 +20,13 @@ public class RobotContainer {
 
     public void configureButtonBindings(){
 
-        arm.setDefaultCommand( 
-           new RunClaw(arm, pJoy)  
+        claw.setDefaultCommand( 
+           new RunClaw(claw, pJoy)  
         );
 
         ButtonA.toggleOnTrue(
             new InstantCommand(() ->
-             arm.setDoPID(!arm.getDoPID())
+                claw.setDoPID(!claw.getDoPID())
             )
         );
     }
