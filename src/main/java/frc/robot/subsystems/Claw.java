@@ -22,8 +22,8 @@ public class Claw extends SubsystemBase {
 
     public Claw() {
         //motors
-        flexMotor = new CANSparkMax(0, MotorType.kBrushless);
-        rotateMotor = new CANSparkMax(1, MotorType.kBrushless);
+        flexMotor = new CANSparkMax(1, MotorType.kBrushless);
+        rotateMotor = new CANSparkMax(2, MotorType.kBrushless);
 
         //flex encoder
         flexEncoder = flexMotor.getEncoder();
@@ -71,7 +71,7 @@ public class Claw extends SubsystemBase {
     }
 
     public void rotateOpenLoop(double speed){
-        flexMotor.set(speed);
+        rotateMotor.set(speed);
     }
 
     public void stop() {
