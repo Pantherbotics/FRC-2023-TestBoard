@@ -2,48 +2,61 @@ package frc.robot.subsystems;
 
 import com.revrobotics.CANSparkMax;
 import com.revrobotics.RelativeEncoder;
+import com.revrobotics.SparkMaxAnalogSensor;
+import com.revrobotics.CANAnalog.AnalogMode;
+import com.revrobotics.CANSparkMax.IdleMode;
+import com.revrobotics.CANSparkMax.SoftLimitDirection;
 import com.revrobotics.CANSparkMaxLowLevel.MotorType;
 
 import edu.wpi.first.math.controller.PIDController;
-import edu.wpi.first.wpilibj.DoubleSolenoid;
-import edu.wpi.first.wpilibj.PneumaticsModuleType;
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import edu.wpi.first.wpilibj2.command.SubsystemBase;
 
 public class Claw extends SubsystemBase {
-    private final CANSparkMax flexMotor, rotateMotor; //switch to not vex stuff
+    private final CANSparkMax flexMotor, rotateMotor; 
 
-    private final RelativeEncoder flexEncoder;
-    private final PIDController flexPID;
-
-    private final DoubleSolenoid clawSolenoid;
-
-    private boolean doPID = false;
+    private final RelativeEncoder flexEncoder, rotateEncoder;
+    private final PIDController flexPID, rotatePID;
 
     public Claw() {
-        //motors
-        flexMotor = new CANSparkMax(7, MotorType.kBrushless);
-        rotateMotor = new CANSparkMax(8, MotorType.kBrushless);
+        //flex motor
+        flexMotor = new CANSparkMax(8, MotorType.kBrushless);
+        flexMotor.restoreFactoryDefaults();
+        flexMotor.setIdleMode(IdleMode.kCoast);
+        flexMotor.setSoftLimit(SoftLimitDirection.kForward, 50);
+        flexMotor.setSoftLimit(SoftLimitDirection.kReverse, -50);
+        flexMotor.enableSoftLimit(SoftLimitDirection.kForward, true);
+        flexMotor.enableSoftLimit(SoftLimitDirection.kReverse, true);
+        flexMotor.burnFlash();
 
         //flex encoder
         flexEncoder = flexMotor.getEncoder();
+        flexEncoder.setPositionConversionFactor(360);
+        flexEncoder.setVelocityConversionFactor(6);
+
         //flex pid
         flexPID = new PIDController(0.05, 0.1, 0);
+        SmartDashboard.putNumber("Flex kP", flexPID.getP());
+        SmartDashboard.putNumber("Flex kI", flexPID.getI());
+        SmartDashboard.putNumber("Flex kD", flexPID.getD());
 
-        //solenoid, open/closes the claw
-        clawSolenoid = new DoubleSolenoid(PneumaticsModuleType.CTREPCM, 2, 3);
-        clawSolenoid.set(DoubleSolenoid.Value.kForward);
+        //rotate motor
+        rotateMotor = new CANSparkMax(7, MotorType.kBrushless);
+        rotateMotor.restoreFactoryDefaults();
+        rotateMotor.setIdleMode(IdleMode.kCoast);
+        rotateMotor.burnFlash();
+
+        //rotate encoder
+        rotateEncoder = rotateMotor.getEncoder();
+        rotateEncoder.setPositionConversionFactor(360);
+        rotateEncoder.setVelocityConversionFactor(6);
+
+        //rotate pid
+        rotatePID = new PIDController(0.1, 0, 0);
+        SmartDashboard.putNumber("Rotate kP", rotatePID.getP());
+        SmartDashboard.putNumber("Rotate kI", rotatePID.getI());
+        SmartDashboard.putNumber("Rotate kD", rotatePID.getD());
     }
-
-    public void flexPID(double speed) {
-        /* boolean withinBounds = getFlexAbsolutePosition() < 485 && getFlexAbsolutePosition() > 253;
-        double newSetpoint = flexPID.getSetpoint() + (withinBounds ? normalizeSpeed(speed) : 0);
-        flexPID.setSetpoint(newSetpoint); */
-    }
-
-    /* public double getFlexAbsolutePosition() {
-        return flexEncoder.getAbsolutePosition() + (flexEncoder.getAbsolutePosition() < 250 ? 360 : 0);
-    } */
     
     private double normalizeSpeed(double speed) {
         double magnitude = Math.abs(speed);
@@ -52,25 +65,30 @@ public class Claw extends SubsystemBase {
         return speed;
     }
 
-    public boolean getDoPID() {
-        return doPID;
-    }
-
-    public void setDoPID(boolean doPID) {
-        this.doPID = doPID;
-    }
-
-    public void flexOpenLoop(double speed){
+    public void flexOpenLoop(double speed) {
         flexMotor.set(speed);
     }
 
-    //Switch to flexPID(double speed) above as soon as testing is done.
-    public void flexClosedLoop(double input){
-        flexPID.setSetpoint(flexPID.getSetpoint() + input);
+    public void rotateOpenLoop(double speed) {
+        rotateMotor.set(speed);
     }
 
-    public void rotateOpenLoop(double speed){
-        rotateMotor.set(speed);
+    public void flex(double speed){
+        double newSetpoint = flexPID.getSetpoint() + speed;
+        flexPID.setSetpoint(newSetpoint);
+    }
+
+    public double getFlexPosition() {
+        return flexEncoder.getPosition();
+    }
+
+    public void rotate(double speed) {
+        double newSetpoint = rotatePID.getSetpoint() + speed;
+        rotatePID.setSetpoint(newSetpoint);
+    }
+
+    public double getRotatePosition() {
+        return rotateEncoder.getPosition();
     }
 
     public void stop() {
@@ -80,23 +98,21 @@ public class Claw extends SubsystemBase {
 
     @Override
     public void periodic() {
-        if(doPID) 
-        {
-            
-        }
+        // flexMotor.set(flexPID.calculate(getFlexPosition()));
+        rotateMotor.set(rotatePID.calculate(getRotatePosition()));
 
-        SmartDashboard.putNumber("Flex point", flexPID.getSetpoint());
+        SmartDashboard.putNumber("Flex setpoint", flexPID.getSetpoint());
+        SmartDashboard.putNumber("Rotate setpoint", rotatePID.getSetpoint());
 
-        SmartDashboard.putNumber("Flex Encoder", flexEncoder.getPosition());
-        SmartDashboard.putNumber("Raw Flex Encoder", flexEncoder.getPosition());
+        SmartDashboard.putNumber("Flex encoder", flexEncoder.getPosition());
+        SmartDashboard.putNumber("Rotate encoder", rotateEncoder.getPosition());
 
-        SmartDashboard.putNumber("Flex kP", 0);
-        SmartDashboard.getNumber("Flex kP", 0);
+        flexPID.setP(SmartDashboard.getNumber("Flex kP", flexPID.getP()));
+        flexPID.setI(SmartDashboard.getNumber("Flex kI", flexPID.getI()));
+        flexPID.setD(SmartDashboard.getNumber("Flex kD", flexPID.getD()));
 
-        SmartDashboard.putNumber("Flex kI", 0);
-        SmartDashboard.getNumber("Flex kI", 0);
-
-        SmartDashboard.putNumber("Flex kD", 0);
-        SmartDashboard.getNumber("Flex kD", 0);
+        rotatePID.setP(SmartDashboard.getNumber("Rotate kP", rotatePID.getP()));
+        rotatePID.setI(SmartDashboard.getNumber("Rotate kI", rotatePID.getI()));
+        rotatePID.setD(SmartDashboard.getNumber("Rotate kD", rotatePID.getD()));
     }
 }

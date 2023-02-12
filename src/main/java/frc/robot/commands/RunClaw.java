@@ -18,26 +18,21 @@ public class RunClaw extends CommandBase {
   public RunClaw(Claw _claw, Joystick _pJoy) {
     this.claw = _claw;
     this.pJoy = _pJoy;
+
     addRequirements(claw);
   }
 
   // Called when the command is initially scheduled.
   @Override
-  public void initialize() {
-  }
+  public void initialize() {}
 
   @Override
   public void execute() {
-    double dx = pJoy.getRawAxis(Constants.OIConstants.kDriverXL);
-    double dy = pJoy.getRawAxis(Constants.OIConstants.kDriverYL);
-
-    if (claw.getDoPID()) {
-      claw.flexClosedLoop(dy);
-      claw.rotateOpenLoop(dx);
-    } else {
-      claw.flexOpenLoop(dy);
-      claw.rotateOpenLoop(dx);
-    }
+    double dx = pJoy.getRawAxis(Constants.OIConstants.kDriverYL);
+    double dy = pJoy.getRawAxis(Constants.OIConstants.kDriverXR);
+    
+    claw.flex(dx);
+    claw.rotate(dy);
   }
 
   // Called once the command ends or is interrupted.

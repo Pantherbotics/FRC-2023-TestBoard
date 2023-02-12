@@ -6,8 +6,8 @@ public class Constants {
         public static final int kDriverXL = 0;
         public static final int kDriverYL = 1;
 
-        public static final int kDriverXR = 2;
-        public static final int kDriverYR = 3;
+        public static final int kDriverXR = 4;
+        public static final int kDriverYR = 5;
         
     }
 
